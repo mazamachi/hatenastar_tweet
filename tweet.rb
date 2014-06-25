@@ -17,12 +17,11 @@ class Tweet
   
   def get_short_url(page_url) 
     Bitly.use_api_version_3 
-    bitly = Bitly.new('o_5u1cq2khtr', 'R_9feef05602b549e5b1b76e21c5a0178a')
+    bitly = Bitly.new('************', '************************************')
     bitly.shorten(page_url).short_url
   end 
 
   def get_comment(user,url)
-#    p url
     enrty_url = URI.escape(url)
     entry_json = nil
     open('http://b.hatena.ne.jp/entry/jsonlite/?url='+enrty_url) do |uri|
@@ -69,7 +68,7 @@ class Tweet
   end
 
   def hourly_tweet
-    Tweet.new.tweets.reverse.each do |tweet|
+    Tweet.new.tweets.reverse.each do |tweet| #10位からツイートしたいのでreverse
       update(tweet)
     end
   end

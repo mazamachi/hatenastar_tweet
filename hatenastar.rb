@@ -18,20 +18,15 @@ class Hatenastar
 			decoded_link = "http://s.hatena.com/entry.json?uri="
 			permalinks[num*i...num*(i+1)].each do |link| 
 			#ブコメのパーマリンクの配列からJSONを取得するURIを作る。
-#				p link
 				break	if link == nil
 				decoded_link << URI.escape(link) <<"&uri="
 			end
 			decoded_link.slice!(-4,4) #末尾の"&uri="を削除
-#			p decoded_link
 			bookmark_json = nil
 			open(decoded_link) do |uri|
 				bookmark_json = JSON.parse(uri.read)
 			end
-		#		p bookmark_json["entries"]
-#			p bookmark_json
 			bookmark_json["entries"].each do |entry| #各ブコメに対する操作
-#				p entry
 				scores[entry["uri"]] = 0
 				scores[entry["uri"]] += entry["stars"].length #黄色スターの配列は0個以上
 				if entry["colored_stars"]
@@ -52,16 +47,13 @@ class Hatenastar
 		open('http://b.hatena.ne.jp/entry/jsonlite/?url='+enrty_url) do |uri|
 			entry_json = JSON.parse(uri.read)
 		end
-		#p entry_json
 		permalinks = []
 		entry_json["bookmarks"].each do |bookmark|
-#			p bookmark
 			time = Time.parse(bookmark["timestamp"])
 			time_s = time.strftime("%Y%m%d")
 			permalinks << ("http://b.hatena.ne.jp/" + bookmark["user"] + "/" + time_s + "#bookmark-" + entry_json["eid"])
 		end
 		permalinks
-		#p permalinks
 	end
 
 	def get_scores(entry_url)
